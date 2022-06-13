@@ -18,6 +18,10 @@ body, p {
     padding: 0;
 }
 
+header {
+    border-bottom: solid 0.75px darkgray;
+}
+
 #header-title {
     font-family: 'Black Ops One', cursive;
     font-size: 5rem;
@@ -44,18 +48,53 @@ main {
     align-items: center;
 }
 
+#button-container {
+    width: 110px;
+    height: 110px;
+    border-radius: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    /* https://cssgradient.io/ */
+    background: linear-gradient(90deg, rgba(120,118,118,1) 3%, rgba(110,110,110,1) 9%, rgba(0,0,0,1) 84%);
+}
+
+#inside-button-container {
+    width: 103px;
+    height: 103px;
+    border-radius: 52px;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #game-button {
-    margin-top: -50px;
+    border: none;
+    font-size: 1.4rem;
+    width: 100px;
+    height: 100px;
+    font-weight: 300;
+    letter-spacing: 0.1rem;
+    border-radius: 50px;
+    background: darkred;
+    color: white;
+    transition: all 0.025s ease;
+}
+
+#game-button:active {
+    transform: scale(98%);
 }
 
 #grid {
     display: grid;
-    width: 600px;
+    width: 550px;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
     box-shadow: 0px 0px 5px rgb(0 0 0 / 0.5);
     gap: 1px;
-    margin: 40px 0;
+    margin: 30px 0;
 }
 
 .grid-box {
