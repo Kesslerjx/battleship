@@ -49,7 +49,7 @@ main {
 }
 
 .grid-wrapper {
-    background: #004080;
+    background: white;
     margin: 50px 0;
     box-shadow: inset 0px 0px 15px rgb(0 0 0 / 0.9);
 }
@@ -68,15 +68,15 @@ main {
 }
 
 .box-ship {
-    background-color: white;
+    background-color: beige;
 }
 
 .box-miss {
-    background: gray;
+    background-color: gray !important;
 }
 
 .box-hit {
-    background-color: lightcoral;
+    background-color: darkred !important;
 }
 
 .box-hover {

@@ -78,7 +78,7 @@ function selectGridBox(event) {
     if(player.isMoveValid(index)) {
         if(enemy.board.hasShipAt(index)) {
             Button.changeText(`You hit their ${enemy.board.shipName(index)}`);
-            player.hits.push(index); //Add index to hit array
+            player.hits.push(index);
             enemy.board.hit(index);
             if(enemy.board.wasShipSunk(index)) {
                 Button.changeText(`You sunk their ${enemy.board.shipName(index)}`);
