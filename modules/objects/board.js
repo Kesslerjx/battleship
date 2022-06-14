@@ -17,7 +17,6 @@ class Board {
     }
 
     wasShipSunk(index) {
-        console.log(this.ships);
         for(const ship of this.ships) {
             if(ship.locations.includes(index)) {
                 return ship.isSunk();
