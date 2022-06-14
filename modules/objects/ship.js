@@ -7,9 +7,13 @@ class Ship {
         this.hits = [];
     }
 
+    hit(index) {
+        this.hits.push(index);
+    }
+
     //If they're equal, then it's sunk
     isSunk() {
-        return (locations === hits);
+        return (this.locations.length === this.hits.length);
     }
 }
 

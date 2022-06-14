@@ -7,6 +7,24 @@ class Board {
         this.misses = [];
     }
 
+    hit(index) {
+        for(const [sIndex, ship] of this.ships.entries()) {
+            if(ship.locations.includes(index)) {
+                this.ships[sIndex].hit(index);
+                break;
+            }
+        }
+    }
+
+    wasShipSunk(index) {
+        console.log(this.ships);
+        for(const ship of this.ships) {
+            if(ship.locations.includes(index)) {
+                return ship.isSunk();
+            }
+        }
+    }
+
     shipName(index) {
         for(const ship of this.ships) {
             if(ship.locations.includes(index)) {

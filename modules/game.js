@@ -43,6 +43,12 @@ function enemyTurn() {
     if(player.hasShipAt(index)) {
         Button.changeText(`Your ${player.shipName(index)} was hit`);
         enemy.board.hits.push(index); //Add index to hit array
+        player.hit(index); //Hit the ship
+        enemy.shipWasHit(); //Notify the enemy that a ship was hit
+        if(player.wasShipSunk(index)) {
+            Button.changeText(`Your ${player.shipName(index)} was sunk`);
+            enemy.shipWasSunk();
+        }
         Grid.boxHit(index); //Set the grid box accordingly
     } else {
         Button.changeText('The enemy missed');
@@ -73,6 +79,11 @@ function selectGridBox(event) {
         if(enemy.board.hasShipAt(index)) {
             Button.changeText(`You hit their ${enemy.board.shipName(index)}`);
             player.hits.push(index); //Add index to hit array
+            enemy.board.hit(index);
+            if(enemy.board.wasShipSunk(index)) {
+                Button.changeText(`You sunk their ${enemy.board.shipName(index)}`);
+                enemy.shipWasSunk();
+            }
             Grid.boxHit(index); //Set the grid box accordingly
         } else {
             Button.changeText('You missed');

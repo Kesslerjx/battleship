@@ -119,8 +119,8 @@ class Enemy {
     // Returns a false if no pattern
     #lookForPattern() {
 
-        let last         = this.board.hits[this.gameboard.hits.length-1];
-        let secondToLast = this.board.hits[this.gameboard.hits.length-2];
+        let last         = this.board.hits[this.board.hits.length-1];
+        let secondToLast = this.board.hits[this.board.hits.length-2];
         let pattern      = PATTERN.getPattern(last, secondToLast);
 
         // Determines that there is a pattern
