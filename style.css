@@ -46,7 +46,6 @@ main {
     font-weight: 300;
     letter-spacing: 0.1rem;
     color: white;
-    margin-top: -50px;
 }
 
 .grid-wrapper {
@@ -81,4 +80,8 @@ main {
 
 .box-hit {
     background: lightcoral;
+}
+
+.box-hover {
+    background: darkblue;
 }
