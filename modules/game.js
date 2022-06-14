@@ -10,31 +10,25 @@ let enemy  = undefined;
 export function start(p, e) {
     player = p;
     enemy  = new Enemy(e);
-
-    allowInput();
-    Grid.clearGrid();
+    playerTurn();
 }
 
 function changeTurn() {
+
     disableInput();
-    //Wait 1 second before clearing the grid
-    setTimeout(function(){
+    wait(1000, function() {
         Grid.clearGrid();
         Grid.fillGrid(player, enemy.board);
-
-        //Wait 1 second before making a move for the enemy
-        setTimeout(function() {
-            enemyTurn();
-        }, 1000)
-    }, 1000);
+    })
+    wait(2000, function() {
+        enemyTurn();
+    })
 }
 
 function playerTurn() {
-    setTimeout(function() {
-        Grid.clearGrid();
-        Grid.fillGridNoShips(player);
-        allowInput();
-    }, 1000)
+    Grid.clearGrid();
+    Grid.fillGridNoShips(player);
+    allowInput();
 }
 
 function enemyTurn() {
@@ -56,7 +50,7 @@ function enemyTurn() {
         Grid.boxMiss(index); //Set the grid box accordingly
     }
 
-    playerTurn();
+    wait(1000, playerTurn);
 }
 
 function allowInput() {
@@ -94,4 +88,10 @@ function selectGridBox(event) {
         player.grid.splice(player.grid.indexOf(index), 1); //Remove the index from the grid array
         changeTurn();
     }
+}
+
+function wait(time, callback) {
+    setTimeout(function() {
+        callback();
+    }, time)
 }

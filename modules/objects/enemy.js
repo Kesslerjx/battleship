@@ -17,16 +17,16 @@ const PATTERN = {
     HORIZONTAL_RIGHT: 1,
     HORIZONTAL_LEFT: -1,
     getPattern: (last, secondToLast) => {
-        if(last - secondToLast === 10 || (last - secondToLast)/2 === 10) {
+        if(last - secondToLast === 10 || (last - secondToLast)/2 === 10 || (last - secondToLast)/3 === 10) {
             return PATTERN.VERTICAL_DOWN;
         } else
-        if(last - secondToLast === -10 || (last - secondToLast)/2 === -10) {
+        if(last - secondToLast === -10 || (last - secondToLast)/2 === -10 || (last - secondToLast)/3 === -10) {
             return PATTERN.VERTICAL_UP;
         } else
-        if(last - secondToLast === 1 || (last - secondToLast)/2 === 1) {
+        if(last - secondToLast === 1 || (last - secondToLast)/2 === 1 || (last - secondToLast)/3 === 1) {
             return PATTERN.HORIZONTAL_RIGHT;
         } else
-        if(last - secondToLast === -1 || (last - secondToLast)/2 === -1) {
+        if(last - secondToLast === -1 || (last - secondToLast)/2 === -1 || (last - secondToLast)/3 === -1) {
             return PATTERN.HORIZONTAL_LEFT;
         } else {
             return false;
@@ -93,6 +93,11 @@ class Enemy {
         //This will stop the enemy from choosing that again
         let indexToRemove = this.board.grid.indexOf(move);
         this.board.grid.splice(indexToRemove, 1);
+
+        console.log(this.board);
+        console.log(this.potentialHits);
+        console.log(this.patternStart);
+        console.log(move)
 
         return move;
     }
