@@ -2,34 +2,28 @@
 class Board {
     constructor(ships = []) {
         this.ships = ships;
-        this.grid = Array.from(Array(100).keys());
-        this.hits = [];             
-        this.misses = [];
     }
 
     hit(index) {
-        for(const [sIndex, ship] of this.ships.entries()) {
-            if(ship.locations.includes(index)) {
-                this.ships[sIndex].hit(index);
-                break;
-            }
-        }
+        let shipIndex = this.#shipIndex(index);
+        this.ships[shipIndex].hit(index);
     }
 
-    wasShipSunk(index) {
-        for(const ship of this.ships) {
-            if(ship.locations.includes(index)) {
-                return ship.isSunk();
-            }
-        }
+    wasSunk(index) {
+        return this.ships[this.#shipIndex(index)].isSunk();
     }
 
-    shipName(index) {
+    allSunk() {
         for(const ship of this.ships) {
-            if(ship.locations.includes(index)) {
-                return ship.name;
+            if(ship.isSunk() === false) {
+                return false;
             }
         }
+        return true;
+    }
+
+    getShipName(index) {
+        return this.ships[this.#shipIndex(index)].name;
     }
 
     //Determines if there is a ship at any of the provided locations
@@ -43,11 +37,17 @@ class Board {
     }
 
     hasShipAt(index) {
-        return this.ships.some(ship => ship.locations.includes(index));
+        for(const ship of this.ships) {
+            if(ship.locations.includes(index)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    isMoveValid(index) {
-        return this.grid.includes(index);
+    #shipIndex(index) {
+        return this.ships.findIndex(ship => ship.locations.includes(index));
     }
 }
 

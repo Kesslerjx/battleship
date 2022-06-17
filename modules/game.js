@@ -3,95 +3,112 @@ import * as Button from './handlers/button-handler.js';
 import { ships } from './data/ships.js'
 import { Board } from './objects/board.js';
 import { Enemy } from './objects/enemy.js';
+import { Player } from './objects/player.js';
 
 let player = undefined;
 let enemy  = undefined;
 
-export function start(p, e) {
-    player = p;
-    enemy  = new Enemy(e);
+export function start(playerBoard, enemyBoard) {
+    console.log('Game is starting');
+    player = new Player(playerBoard);
+    enemy  = new Enemy(enemyBoard);
+
     playerTurn();
+    Button.changeText('Pick a location');
 }
 
-function changeTurn() {
-
-    disableInput();
-    wait(1000, function() {
-        Grid.clearGrid();
-        Grid.fillGrid(player, enemy.board);
-    })
-    wait(2000, function() {
-        enemyTurn();
-    })
+function endGame() {
+    console.log('Game has ended');
 }
 
 function playerTurn() {
+    allowInput();
     Grid.clearGrid();
     Grid.fillGridNoShips(player);
-    allowInput();
 }
 
 function enemyTurn() {
-    let index = enemy.getMove();
-
-    if(player.hasShipAt(index)) {
-        Button.changeText(`Your ${player.shipName(index)} was hit`);
-        enemy.board.hits.push(index); //Add index to hit array
-        player.hit(index); //Hit the ship
-        enemy.shipWasHit(); //Notify the enemy that a ship was hit
-        if(player.wasShipSunk(index)) {
-            Button.changeText(`Your ${player.shipName(index)} was sunk`);
-            enemy.shipWasSunk();
-        }
-        Grid.boxHit(index); //Set the grid box accordingly
-    } else {
-        Button.changeText('The enemy missed');
-        enemy.board.misses.push(index); //Add index to misses array
-        Grid.boxMiss(index); //Set the grid box accordingly
-    }
-
-    wait(1000, playerTurn);
+    disableInput();
+    Grid.clearGrid();
+    Grid.fillGrid(player.board, enemy);
+    setTimeout(enemyMove, 1000);
 }
 
 function allowInput() {
-    Button.changeText('Pick a location to hit');
-    Grid.addEventListener('click', selectGridBox);
+    Grid.addEventListener('click', playMove);
     Grid.addEventListener('mouseover', Grid.highlightBox);
     Grid.addEventListener('mouseout', Grid.unhighlightBox);
 }
 
 function disableInput() {
-    Grid.removeEventListener('click', selectGridBox);
+    Grid.removeEventListener('click', playMove);
     Grid.removeEventListener('mouseover', Grid.highlightBox);
-    Grid.removeEventListener('mouseout', Grid.unhighlightBox); 
+    Grid.removeEventListener('mouseout', Grid.unhighlightBox);
 }
 
-function selectGridBox(event) {
+function playMove(event) {
+
     let index = Grid.boxIndex(event);
-    
+
     if(player.isMoveValid(index)) {
         if(enemy.board.hasShipAt(index)) {
-            Button.changeText(`You hit their ${enemy.board.shipName(index)}`);
-            player.hits.push(index);
+            Button.changeText('You hit a ship');
             enemy.board.hit(index);
-            if(enemy.board.wasShipSunk(index)) {
-                Button.changeText(`You sunk their ${enemy.board.shipName(index)}`);
-                enemy.shipWasSunk();
+            if(enemy.board.wasSunk(index))  {
+                Button.changeText(`You sunk their ${enemy.board.getShipName(index)}`);
             }
-            Grid.boxHit(index); //Set the grid box accordingly
+            Grid.boxHit(index);
         } else {
             Button.changeText('You missed');
-            player.misses.push(index); //Add index to misses array
-            Grid.boxMiss(index); //Set the grid box accordingly
+            Grid.boxMiss(index);
         }
 
-        player.grid.splice(player.grid.indexOf(index), 1); //Remove the index from the grid array
-        changeTurn();
+        player.moveIndex(index, enemy.board.hasShipAt(index));
+
+        if(isGameOver()) { 
+            endGame(); 
+        } else {
+            setTimeout(enemyTurn, 1500);
+        }
+
+    } else {
+        console.log('Move is invalid');
     }
 }
 
-function wait(time, callback) {
-    setTimeout(function() {
-        callback();
-    }, time)
+
+
+function enemyMove() {
+    let move = enemy.move();
+
+    if(player.board.hasShipAt(move)) {
+        Button.changeText(`The enemy hit your ${player.board.getShipName(move)}`);
+        player.board.hit(move);
+        Grid.boxHit(move);
+
+        if(enemy.possibleHits.length === 0) {
+            enemy.setPossibleHits(move);
+        }
+
+        if(player.board.wasSunk(move))  {
+            Button.changeText(`They sunk your ${player.board.getShipName(move)}`);
+            enemy.shipSunk();
+        } 
+    } else {
+        Button.changeText(`The enemy missed`);
+        Grid.boxMiss(move);
+    }
+    
+    console.log(enemy.possibleHits);
+    enemy.moveIndex(move, player.board.hasShipAt(move));
+
+    if(isGameOver()) { 
+        endGame(); 
+    } else {
+        setTimeout(playerTurn, 1500);
+    }
+}
+
+function isGameOver() {
+    return (player.board.allSunk() || enemy.board.allSunk());
 }

@@ -52,26 +52,26 @@ export function clearGrid() {
     });
 }
 
-export function fillGrid(fillBoard, otherBoard) {
+export function fillGrid(fillBoard, otherPlayer) {
     getGrid().childNodes.forEach( (element, index) => {
         if(fillBoard.hasShipAt(index)) {
             element.classList.add('box-ship');
         }
-        if(otherBoard.hits.includes(index)) {
+        if(otherPlayer.hits.includes(index)) {
             element.classList.add('box-hit');
         }
-        if(otherBoard.misses.includes(index)) {
+        if(otherPlayer.misses.includes(index)) {
             element.classList.add('box-miss');
         }
     });
 }
 
-export function fillGridNoShips(board) {
+export function fillGridNoShips(player) {
     getGrid().childNodes.forEach( (element, index) => {
-        if(board.hits.includes(index)) {
+        if(player.hits.includes(index)) {
             element.classList.add('box-hit');
         }
-        if(board.misses.includes(index)) {
+        if(player.misses.includes(index)) {
             element.classList.add('box-miss');
         }
     });
