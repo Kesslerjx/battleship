@@ -12,6 +12,7 @@ class Enemy extends Player {
 
         if(this.possibleHits.length > 0) {
             let pattern = this.#isPattern();
+            console.log(pattern);
 
             if(!pattern) {
                 this.patternStart = undefined;
@@ -57,7 +58,12 @@ class Enemy extends Player {
             let lastIndex  = this.hits.length - 1;
             let difference = this.hits[lastIndex] - this.hits[lastIndex - 1];
 
-            if([10,-10,1,-1,2,-2,20,-20].includes(difference)) {
+            //[35,45,55,65,75]
+            //[55,45,35,65]
+
+            if([10,-10,1,-1,2,-2,20,-20,3,-3,30,-30].includes(difference)) {
+
+               difference = this.#normalizeDifference(difference);
 
                 if(this.patternStart === undefined) {
                     this.patternStart = this.hits[lastIndex - 1];
@@ -69,6 +75,17 @@ class Enemy extends Player {
         }
 
         return move;
+    }
+
+    #normalizeDifference(difference) {
+        if([10,-10].includes(difference)) {
+            return difference;
+        } else
+        if([20,-20,30,-30].includes(difference)) {
+            return (10 * Math.sign(difference));
+        } else {
+            return (1 * Math.sign(difference));
+        }
     }
 
     #checkPattern(move, pattern, count) {
