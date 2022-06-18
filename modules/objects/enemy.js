@@ -58,9 +58,6 @@ class Enemy extends Player {
             let lastIndex  = this.hits.length - 1;
             let difference = this.hits[lastIndex] - this.hits[lastIndex - 1];
 
-            //[35,45,55,65,75]
-            //[55,45,35,65]
-
             if([10,-10,1,-1,2,-2,20,-20,3,-3,30,-30].includes(difference)) {
 
                difference = this.#normalizeDifference(difference);
