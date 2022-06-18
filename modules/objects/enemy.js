@@ -63,6 +63,7 @@ class Enemy extends Player {
                     this.patternStart = this.hits[lastIndex - 1];
                 }
 
+                console.log(this.hits);
                 move = this.#checkPattern(this.hits[lastIndex] + difference, difference, 0);
             } 
         }

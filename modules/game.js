@@ -17,8 +17,13 @@ export function start(playerBoard, enemyBoard) {
     Button.changeText('Pick a location');
 }
 
-function endGame() {
-    console.log('Game has ended');
+function endGame(loser) {
+
+    if(loser === player) {
+        Button.changeText('You lose. Play again?')
+    } else {
+        Button.changeText('You win! Play again?')
+    }
 }
 
 function playerTurn() {
@@ -65,11 +70,7 @@ function playMove(event) {
 
         player.moveIndex(index, enemy.board.hasShipAt(index));
 
-        if(isGameOver()) { 
-            endGame(); 
-        } else {
-            setTimeout(enemyTurn, 1500);
-        }
+        checkGameEnd(enemyTurn);
 
     } else {
         console.log('Move is invalid');
@@ -99,16 +100,18 @@ function enemyMove() {
         Grid.boxMiss(move);
     }
     
-    console.log(enemy.possibleHits);
     enemy.moveIndex(move, player.board.hasShipAt(move));
 
-    if(isGameOver()) { 
-        endGame(); 
-    } else {
-        setTimeout(playerTurn, 1500);
-    }
+    checkGameEnd(playerTurn);
 }
 
-function isGameOver() {
-    return (player.board.allSunk() || enemy.board.allSunk());
+function checkGameEnd(turnFunction) {
+    if(player.board.allSunk()) {
+        endGame(player); ;
+    }else
+    if(enemy.board.allSunk()) {
+        endGame(enemy); 
+    } else {
+        setTimeout(turnFunction, 1500);
+    }
 }
