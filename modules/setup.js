@@ -29,6 +29,15 @@ export function start() {
 
 }
 
+export function restart() {
+    shipIndex       = -1;
+    shipOrientation = ORIENTATION.VERTICAL;
+    playerBoard     = new Board();
+    storedEvent     = undefined;
+
+    start();
+}
+
 function end() {
     document.removeEventListener('keydown', changeOrientation);
     Grid.removeEventListener('click', placeShip);

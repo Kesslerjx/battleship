@@ -1,5 +1,6 @@
 import * as Grid from './handlers/grid-handler.js';
 import * as Button from './handlers/button-handler.js';
+import * as Setup from './setup.js';
 import { ships } from './data/ships.js'
 import { Board } from './objects/board.js';
 import { Enemy } from './objects/enemy.js';
@@ -24,6 +25,18 @@ function endGame(loser) {
     } else {
         Button.changeText('You win! Play again?')
     }
+
+    Button.setListener(restartGame);
+}
+
+function restartGame() {
+    Button.removeListener(restartGame);
+
+    player = undefined;
+    enemy  = undefined;
+
+    Grid.clearGrid();
+    Setup.restart();
 }
 
 function playerTurn() {
@@ -33,7 +46,6 @@ function playerTurn() {
 }
 
 function enemyTurn() {
-    disableInput();
     Grid.clearGrid();
     Grid.fillGrid(player.board, enemy);
     setTimeout(enemyMove, 1000);
@@ -56,6 +68,9 @@ function playMove(event) {
     let index = Grid.boxIndex(event);
 
     if(player.isMoveValid(index)) {
+
+        disableInput();
+
         if(enemy.board.hasShipAt(index)) {
             Button.changeText('You hit a ship');
             enemy.board.hit(index);
@@ -106,8 +121,9 @@ function enemyMove() {
 }
 
 function checkGameEnd(turnFunction) {
+
     if(player.board.allSunk()) {
-        endGame(player); ;
+        endGame(player);
     }else
     if(enemy.board.allSunk()) {
         endGame(enemy); 
