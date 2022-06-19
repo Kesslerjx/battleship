@@ -9,7 +9,8 @@ class Enemy extends Player {
 
     move() {
         let move = this.#randomMove();
-
+        
+        /*
         if(this.possibleHits.length > 0) {
             let pattern = this.#isPattern();
             console.log(pattern);
@@ -22,6 +23,7 @@ class Enemy extends Player {
                 move = pattern;
             }
         }
+        */
 
         return move;
     }
