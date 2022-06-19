@@ -97,13 +97,15 @@ function playMove(event) {
 function enemyMove() {
     let move = enemy.move();
 
+    enemy.moveIndex(move, player.board.hasShipAt(move));
+
     if(player.board.hasShipAt(move)) {
         Button.changeText(`The enemy hit your ${player.board.getShipName(move)}`);
         player.board.hit(move);
         Grid.boxHit(move);
 
-        if(enemy.possibleHits.length === 0) {
-            enemy.setPossibleHits(move);
+        if(enemy.adjacentBoxes.length === 0) {
+            enemy.getAdjacentBoxes(move);
         }
 
         if(player.board.wasSunk(move))  {
@@ -113,15 +115,15 @@ function enemyMove() {
     } else {
         Button.changeText(`The enemy missed`);
         Grid.boxMiss(move);
+        enemy.missed();
     }
     
-    enemy.moveIndex(move, player.board.hasShipAt(move));
-
-    checkGameEnd(playerTurn);
+    checkGameEnd(enemyTurn);
 }
 
 function checkGameEnd(turnFunction) {
 
+    
     if(player.board.allSunk()) {
         endGame(player);
     }else
