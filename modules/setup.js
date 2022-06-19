@@ -18,9 +18,9 @@ let playerBoard     = new Board();
 let storedEvent     = undefined;
 
 export function start() {
-    shipIndex += 1;
-    
-    Button.changeText(`Place your ${ships[shipIndex].name}`);
+
+    nextShip();
+
     Button.removeListener(start);
     document.addEventListener('keydown', changeOrientation);
     Grid.addEventListener('click', placeShip);
@@ -49,7 +49,7 @@ function nextShip() {
     shipIndex += 1;
     
     if(shipIndex < ships.length) {
-        Button.changeText(`Place your ${ships[shipIndex].name}`);
+        Button.changeText(`Place your ${ships[shipIndex].name}. Press 'R' to rotate.`);
     } else {
         end();
         Game.start(playerBoard, buildEnemyBoard());
