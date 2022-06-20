@@ -32,8 +32,11 @@ class Enemy extends Player {
     //Gets all the adjacent boxes are a hit is registered
     //Those adjacent boxes must be valid moves
     getAdjacentBoxes(i) {
-        this.adjacentBoxes = [i + 10, i-10, i+1, i-1];
-        this.adjacentBoxes = this.adjacentBoxes.filter(index => this.isMoveValid(index, i));
+        this.adjacentBoxes = [10,-10,1,-1].map(n => {
+            if(this.#isMoveValid(i+n, n)) {
+                return i+n;
+            }
+        }).filter(n => n !== undefined);
     }
 
     //Notifies the enemy AI that it missed
