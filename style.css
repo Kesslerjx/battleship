@@ -20,8 +20,9 @@ body, p {
 }
 
 #header-title {
+    padding-top: 20px;
     font-family: 'Black Ops One', cursive;
-    font-size: 5rem;
+    font-size: clamp(3.5rem, 11vw, 5rem);
     text-align: center;
     color: white;
 }
@@ -41,7 +42,7 @@ main {
 
 #game-button {
     border: none;
-    font-size: 2rem;
+    font-size: clamp(1rem, 3vw, 2rem);
     background: none;
     font-weight: 300;
     letter-spacing: 0.1rem;
@@ -52,11 +53,11 @@ main {
     background: white;
     margin: 50px 0;
     box-shadow: inset 0px 0px 15px rgb(0 0 0 / 0.9);
+    width: clamp(250px, 60vw, 550px);
 }
 
 #grid {
     display: grid;
-    width: 550px;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
     gap: 1px;
