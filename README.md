@@ -11,14 +11,14 @@ from this grid array. It will continue to make random moves until a ship has bee
         return this.grid[Math.floor(Math.random() * this.grid.length)];
     }
 
-Once a ship has been hit, it will get the 4 adjecent boxes. Those will always be +10, -10, +1, and -1 from the index. Those adjacent indexes will be
-filtered to ensure they are valid moves. Moves aren't valid if they aren't in the grid array (meaning they've already been played), or if the 
-ship is horizontal and the index is not on the same row (see isSameRow section). Once these are found, it will start using indexes from this array
-(adjacentBoxes) until there are at least 2 hits.
+Once a ship has been hit, it will get the 4 adjecent boxes. Those will always be +10, -10, +1, and -1 from the index. It uses the map function to get the adjacent boxes which will not return a value for any moves that aren't valid. Those undefined elements are then filtered out. Moves aren't valid if they aren't in the grid array (meaning they've already been played), or if the ship is horizontal and the index is not on the same row (see isSameRow section). Once these are found, it will start using indexes from this array (adjacentBoxes) until there are at least 2 hits.
 
     getAdjacentBoxes(i) {
-        this.adjacentBoxes = [i + 10, i-10, i+1, i-1];
-        this.adjacentBoxes = this.adjacentBoxes.filter(index => this.isMoveValid(index, i));
+        this.adjacentBoxes = [10,-10,1,-1].map(n => {
+            if(this.#isMoveValid(i+n, n)) {
+                return i+n;
+            }
+        }).filter(n => n !== undefined);
     }
     
     #isMoveValid(move, pattern) {
@@ -32,8 +32,7 @@ ship is horizontal and the index is not on the same row (see isSameRow section).
 
 Once at least 2 hits have been registered, it will start to look for a pattern. The pattern is found by finding the difference between the last 2 hits.
 If there is a pattern, the difference will equal to 10, -10, 1, or -1. It will then find the possible places for the ship to be (possibleHits). It does
-this by using the pattern to find all valid indexes spanning each direction from the last hit. For example, if the last hit was 35, and the pattern was 1.
-possibleHits will be equal to [36,37,38,39,33,32,31,30]. Notice it skips 35 and 34, because those would have been the last 2 hits, making those moves
+this by using the pattern to find all valid indexes spanning each direction from the last hit. For example, if the last hit was 35, and the pattern was 1. possibleHits will be equal to [36,37,38,39,33,32,31,30]. Notice it skips 35 and 34, because those would have been the last 2 hits, making those moves
 invalid.
 
     #checkPattern() {
@@ -43,27 +42,34 @@ invalid.
             let isPattern  = [10,-10,1,-1].includes(difference);
 
             if(isPattern) {
-                this.#setPossibleHits(difference, this.hits[lastIndex]);
+                this.#setPossibleHits(difference);
             }
 
         }
     }
     
-    #setPossibleHits(pattern, lastHit) {
+    #setPossibleHits(pattern) {
 
-        let next = lastHit + pattern;
+        let lastHit  = this.hits[this.hits.length - 1];
+        let firstHit = this.hits[this.hits.length - 2];
 
-        while(this.#isMoveValid(next, pattern)) {
-            this.possibleHits.push(next);
-            next += pattern;
-        }
+        let newArray = [...Array(20)].map( (e, i, a) => {
+            if(i === 0) {
+                return lastHit + pattern;
+            } else 
+            if(i <= 9) {
+                return a[i-1] + pattern;
+            } else
+            if(i === 10) {
+                return firstHit - pattern;
+            } else {
+                return a[i-1] - pattern;
+            }
+        })
 
-        next = (lastHit-pattern) - pattern;
+        //Filter out anything that is undefined for whatever reason and any moves that aren't valid
+        this.possibleHits = newArray.filter(x => x !== undefined).filter(x => this.#isMoveValid(x, pattern));
 
-        while(this.#isMoveValid(next, pattern)) {
-            this.possibleHits.push(next);
-            next -= pattern;
-        }
     }
 
 It will start to use the indexes from this array until the ship has been sunk, or until it misses. Once it misses, it will go in the opposite direction.
