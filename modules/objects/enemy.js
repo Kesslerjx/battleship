@@ -92,7 +92,7 @@ class Enemy extends Player {
         let lastHit  = this.hits[this.hits.length - 1];
         let firstHit = this.hits[this.hits.length - 2];
 
-        let newArray = [...Array(10)].map( (e, i, a) => {
+        let newArray = [...Array(20)].map( (e, i, a) => {
             if(i === 0) {
                 return lastHit + pattern;
             } else 
