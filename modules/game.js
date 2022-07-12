@@ -118,7 +118,7 @@ function enemyMove() {
         enemy.missed();
     }
     
-    checkGameEnd(enemyMove);
+    checkGameEnd(playerTurn);
 }
 
 function checkGameEnd(turnFunction) {
