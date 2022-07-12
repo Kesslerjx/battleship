@@ -79,36 +79,26 @@ class Enemy extends Player {
             let isPattern  = [10,-10,1,-1].includes(difference);
 
             if(isPattern) {
-                this.#setPossibleHits(difference);
+                //this.#setPossibleHits(difference);
+                this.#setPossibleHits(difference, 0);
             }
 
         }
     }
 
     //Builds the possible hits array based on the first hit, last hit, and the pattern
-    //This could probably be recursive, but the last algorithm I had didn't work properly
-    #setPossibleHits(pattern) {
+    #setPossibleHits(pattern, count, previous=this.hits[this.hits.length - 1]) {
+        let nextMove  = previous + pattern;
 
-        let lastHit  = this.hits[this.hits.length - 1];
-        let firstHit = this.hits[this.hits.length - 2];
-
-        let newArray = [...Array(20)].map( (e, i, a) => {
-            if(i === 0) {
-                return lastHit + pattern;
-            } else 
-            if(i <= 9) {
-                return a[i-1] + pattern;
-            } else
-            if(i === 10) {
-                return firstHit - pattern;
+        if(count !== 2) {
+            if(this.#isMoveValid(nextMove, pattern)) {
+                this.possibleHits.push(nextMove);
+                return this.#setPossibleHits(pattern, count, nextMove);
             } else {
-                return a[i-1] - pattern;
+                count += 1;
+                return this.#setPossibleHits((pattern * -1), count, this.hits[this.hits.length - 2]);
             }
-        })
-
-        //Filter out anything that is undefined for whatever reason and any moves that aren't valid
-        this.possibleHits = newArray.filter(x => x !== undefined).filter(x => this.#isMoveValid(x, pattern));
-
+        }
     }
 
     //Determines if the move is valid
